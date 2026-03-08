@@ -1,38 +1,50 @@
 "use client";
 
-import React, { useState } from 'react';
+import { ShelterTable } from "@/components/ShelterTable";
+import { useState, JSX } from "react";
+const weathers = ["폭염", "한파"] as const;
+type Weather = (typeof weathers)[number];
 
-export default function WeatherShelterPage() {
-  const [activeTab, setActiveTab] = useState("폭염");
+export default function WeatherShelterPage(): JSX.Element {
+  const [activeTab, setActiveTab] = useState<Weather>("폭염");
 
   const handleSettingsClick = () => alert("설정 메뉴입니다.");
-  const handleRouteClick = (name: string) => alert(`${name} 경로 안내를 시작합니다!`);
   const handleLoginClick = () => alert("로그인 페이지는 준비 중입니다.");
 
   return (
     <div className="max-w-md mx-auto bg-emerald-50 min-h-screen pb-24 font-sans text-gray-900 shadow-2xl relative">
-      
       {/* 상단 헤더 */}
       <header className="flex justify-between items-center p-4 bg-white/95 backdrop-blur-sm border-b sticky top-0 z-10">
-        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">O</div>
+        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+          O
+        </div>
         <h1 className="font-bold text-lg">쉴라잡이</h1>
-        <button onClick={handleSettingsClick} className="text-gray-500 p-2 hover:bg-emerald-100 rounded-full transition">
+        <button
+          onClick={handleSettingsClick}
+          className="text-gray-500 p-2 hover:bg-emerald-100 rounded-full transition"
+        >
           ⚙️
         </button>
       </header>
 
       {/* 메인 날씨 카드 */}
-      <section className={`m-4 p-6 rounded-3xl text-white shadow-lg transition-all duration-500 ${
-        activeTab === "폭염" 
-          ? "bg-gradient-to-br from-orange-500 to-red-600" 
-          : "bg-gradient-to-br from-blue-500 to-indigo-700"
-      }`}>
+      <section
+        className={`m-4 p-6 rounded-3xl text-white shadow-lg transition-all duration-500 ${
+          activeTab === "폭염"
+            ? "bg-gradient-to-br from-orange-500 to-red-600"
+            : "bg-gradient-to-br from-blue-500 to-indigo-700"
+        }`}
+      >
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
-            <span className="text-3xl">{activeTab === "폭염" ? "🌡️" : "❄️"}</span>
+            <span className="text-3xl">
+              {activeTab === "폭염" ? "🌡️" : "❄️"}
+            </span>
             <div>
               <h2 className="text-xl font-bold">{activeTab} 주의보</h2>
-              <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Live</span>
+              <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">
+                Live
+              </span>
             </div>
           </div>
           <button className="text-white/70">⚠️</button>
@@ -44,27 +56,41 @@ export default function WeatherShelterPage() {
             <span className="text-3xl ml-1">°C</span>
           </h3>
           <p className="mt-2 text-white/90 text-sm leading-relaxed">
-            {activeTab === "폭염" 
-              ? "매우 무더운 날씨입니다. 충분한 수분을 섭취하세요." 
+            {activeTab === "폭염"
+              ? "매우 무더운 날씨입니다. 충분한 수분을 섭취하세요."
               : "매우 추운 날씨입니다. 장시간 실외 활동을 자제하세요."}
           </p>
         </div>
 
         {/* 기상 상세 정보 그리드 */}
         <div className="grid grid-cols-2 gap-3 mt-8">
-          <WeatherInfoItem label="습도" value={activeTab === "폭염" ? "65%" : "30%"} icon="💧" />
-          <WeatherInfoItem label="풍속" value={activeTab === "폭염" ? "1.2m/s" : "5.4m/s"} icon="🚩" />
+          <WeatherInfoItem
+            label="습도"
+            value={activeTab === "폭염" ? "65%" : "30%"}
+            icon="💧"
+          />
+          <WeatherInfoItem
+            label="풍속"
+            value={activeTab === "폭염" ? "1.2m/s" : "5.4m/s"}
+            icon="🚩"
+          />
           <WeatherInfoItem label="미세먼지" value="45µg/m²" icon="💨" />
-          <WeatherInfoItem label="강수량" value={activeTab === "폭염" ? "0mm" : "2.5mm"} icon="☔" />
+          <WeatherInfoItem
+            label="강수량"
+            value={activeTab === "폭염" ? "0mm" : "2.5mm"}
+            icon="☔"
+          />
         </div>
 
         {/* 📈 [신규] 시간별 기온 변화 그래프 껍데기 */}
         <div className="mt-8 p-4 bg-black/10 rounded-2xl border border-white/10 backdrop-blur-md">
           <div className="flex justify-between items-center mb-4">
-            <p className="text-[11px] font-bold text-white/80">시간별 기온 변화</p>
+            <p className="text-[11px] font-bold text-white/80">
+              시간별 기온 변화
+            </p>
             <p className="text-[10px] text-white/60">단위: °C</p>
           </div>
-          
+
           {/* 그래프 가이드라인 및 데이터 공간 */}
           <div className="h-24 w-full flex items-end justify-between px-1 relative">
             {/* 가로 점선 가이드 (CSS로 구현) */}
@@ -77,11 +103,13 @@ export default function WeatherShelterPage() {
             {/* 샘플 데이터 막대 (나중에 Recharts 등으로 대체) */}
             {[28, 32, 36, 35, 33, 30].map((val, idx) => (
               <div key={idx} className="flex flex-col items-center gap-1 z-10">
-                <div 
-                  className="w-1.5 bg-white/40 rounded-full transition-all duration-1000" 
-                  style={{ height: `${(val / 40) * 60}px` }} 
+                <div
+                  className="w-1.5 bg-white/40 rounded-full transition-all duration-1000"
+                  style={{ height: `${(val / 40) * 60}px` }}
                 />
-                <span className="text-[8px] text-white/80">{10 + idx * 2}시</span>
+                <span className="text-[8px] text-white/80">
+                  {10 + idx * 2}시
+                </span>
               </div>
             ))}
           </div>
@@ -90,13 +118,13 @@ export default function WeatherShelterPage() {
 
       {/* 탭 버튼 */}
       <div className="flex px-4 gap-3 mb-6">
-        {["폭염", "한파"].map((tab) => (
+        {weathers.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-3 rounded-2xl text-sm font-bold transition-all ${
-              activeTab === tab 
-                ? "bg-green-800 text-white shadow-md scale-[1.02]" 
+              activeTab === tab
+                ? "bg-green-800 text-white shadow-md scale-[1.02]"
                 : "bg-white border border-gray-200 text-gray-400 hover:bg-emerald-50"
             }`}
           >
@@ -107,35 +135,44 @@ export default function WeatherShelterPage() {
 
       {/* 쉼터 리스트 섹션 */}
       <section className="px-4">
-        <h3 className="text-sm font-bold text-gray-600 mb-3 px-1">가까운 {activeTab} 쉼터</h3>
-        <div className="space-y-3">
-          <ShelterItem 
-            name={activeTab === "폭염" ? "중앙도서관 무더위쉼터" : "시민회관 한파쉼터"}
-            address="서울특별시 강남구 테헤란로 123" 
-            distance="0.3km" 
-            onRoute={() => handleRouteClick(activeTab === "폭염" ? "중앙도서관" : "시민회관")}
-          />
-          <ShelterItem 
-            name="구민체육센터" 
-            address="서울특별시 강남구 대치동 234" 
-            distance="1.2km" 
-            onRoute={() => handleRouteClick("구민체육센터")}
-          />
-        </div>
+        <ShelterTable activeTab={activeTab} />
       </section>
 
       {/* 하단 네비게이션 */}
       <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-emerald-100 flex justify-around py-3">
-        <NavItem label="지도" icon="🗺️" active={false} onClick={() => alert("지도 준비 중")} />
-        <NavItem label="홈" icon="🏠" active={true} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
-        <NavItem label="로그인" icon="👤" active={false} onClick={handleLoginClick} />
+        <NavItem
+          label="지도"
+          icon="🗺️"
+          active={false}
+          onClick={() => alert("지도 준비 중")}
+        />
+        <NavItem
+          label="홈"
+          icon="🏠"
+          active={true}
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        />
+        <NavItem
+          label="로그인"
+          icon="👤"
+          active={false}
+          onClick={handleLoginClick}
+        />
       </nav>
     </div>
   );
 }
 
 // --- 하위 컴포넌트 ---
-function WeatherInfoItem({ label, value, icon }: { label: string, value: string, icon: string }) {
+function WeatherInfoItem({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon: string;
+}): JSX.Element {
   return (
     <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
       <div className="flex items-center gap-1.5 text-[11px] text-white/70 mb-1">
@@ -146,27 +183,22 @@ function WeatherInfoItem({ label, value, icon }: { label: string, value: string,
   );
 }
 
-function ShelterItem({ name, address, distance, onRoute }: { name: string, address: string, distance: string, onRoute: () => void }) {
+function NavItem({
+  label,
+  icon,
+  active,
+  onClick,
+}: {
+  label: string;
+  icon: string;
+  active: boolean;
+  onClick: () => void;
+}): JSX.Element {
   return (
-    <div className="flex justify-between items-center p-4 bg-white/80 rounded-2xl shadow-sm border border-emerald-100/50 transition backdrop-blur-sm">
-      <div className="flex gap-3">
-        <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600 border border-green-100">📍</div>
-        <div>
-          <h4 className="font-bold text-[13px]">{name}</h4>
-          <p className="text-[10px] text-gray-400 mt-0.5">{address}</p>
-        </div>
-      </div>
-      <div className="flex flex-col items-end gap-2">
-        <span className="text-[10px] text-green-600 font-extrabold bg-green-50 px-2 py-0.5 rounded-full border border-green-100">{distance}</span>
-        <button onClick={onRoute} className="text-[10px] bg-green-800 text-white px-3 py-1.5 rounded-lg font-bold">↗ 경로</button>
-      </div>
-    </div>
-  );
-}
-
-function NavItem({ label, icon, active, onClick }: { label: string, icon: string, active: boolean, onClick: () => void }) {
-  return (
-    <button onClick={onClick} className={`flex flex-col items-center gap-1 flex-1 ${active ? 'text-green-700' : 'text-gray-400'}`}>
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 flex-1 ${active ? "text-green-700" : "text-gray-400"}`}
+    >
       <span className="text-xl">{icon}</span>
       <span className="text-[10px] font-bold">{label}</span>
     </button>
