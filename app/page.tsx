@@ -6,8 +6,8 @@ import { useState } from "react";
 type PTYType = 0 | 1 | 2 | 3;
 
 export default function WeatherShelterPage() {
-  const [temp, setTemp] = useState(9); // 현재 기온 예시 (쌀쌀함 구간)
-  const [pty, setPty] = useState<PTYType>(0); // 2. 현재 PTY 상태 관리 (기본값: 화창함)
+  const [temp, setTemp] = useState(9); // 현재 기온 예시
+  const [pty, setPty] = useState<PTYType>(0); // 현재 PTY 상태 관리
   const [showDetail, setShowDetail] = useState(false);
 
   // 온도별 배경색 설정
@@ -19,17 +19,15 @@ export default function WeatherShelterPage() {
     return "from-blue-700 to-indigo-900";
   };
 
-  // 3. [업데이트] PTY와 온도를 조합하여 상세 데이터 반환
+  // PTY와 온도를 조합하여 상세 데이터 반환
   const getStatusData = (t: number, p: PTYType) => {
-    // PTY에 따른 아이콘 및 타이틀 설정
     const ptyData = {
-      0: { title: "화창함", icon: "https://cdn-icons-png.flaticon.com/128/869/869869.png" }, // 태양
-      1: { title: "비", icon: "https://cdn-icons-png.flaticon.com/128/3313/3313888.png" },     // 비구름
-      2: { title: "눈", icon: "https://cdn-icons-png.flaticon.com/128/2315/2315302.png" },     // 눈사람
-      3: { title: "흐림", icon: "https://cdn-icons-png.flaticon.com/128/1146/1146869.png" },     // 구름
+      0: { title: "화창함", icon: "https://cdn-icons-png.flaticon.com/128/869/869869.png" },
+      1: { title: "비", icon: "https://cdn-icons-png.flaticon.com/128/3313/3313888.png" },
+      2: { title: "눈", icon: "https://cdn-icons-png.flaticon.com/128/2315/2315302.png" },
+      3: { title: "흐림", icon: "https://cdn-icons-png.flaticon.com/128/1146/1146869.png" },
     };
 
-    // 온도에 따른 기본 메시지 설정
     let desc = "";
     if (t >= 33) desc = "극심한 폭염입니다! 야외 활동을 중단하세요.";
     else if (t >= 25) desc = "무더운 날씨입니다. 수분을 충분히 섭취하세요.";
@@ -62,20 +60,17 @@ export default function WeatherShelterPage() {
       <section className={`m-4 p-6 rounded-3xl text-white shadow-lg transition-all duration-700 bg-gradient-to-br ${getBgColor(temp)}`}>
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
-            {/* 4. 상태 타이틀 및 테스트 버튼 배치 조정 */}
             <div>
               <h2 className="text-xl font-bold">{status.title}</h2>
               <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Live</span>
             </div>
           </div>
           
-          {/* 테스트 버튼 영역 (온도 및 PTY 조절) */}
           <div className="flex flex-col gap-2 items-end">
             <div className="flex gap-1">
               <button onClick={() => setTemp(temp - 5)} className="bg-white/20 px-2 py-1 rounded text-xs active:scale-95 transition">-5°</button>
               <button onClick={() => setTemp(temp + 5)} className="bg-white/20 px-2 py-1 rounded text-xs active:scale-95 transition">+5°</button>
             </div>
-            {/* PTY 변경 테스트 버튼 */}
             <select 
               value={pty} 
               onChange={(e) => setPty(Number(e.target.value) as PTYType)}
@@ -89,23 +84,17 @@ export default function WeatherShelterPage() {
           </div>
         </div>
 
-        {/* 5. [핵심 수정] 기온 바로 옆에 PTY 이미지 배치 */}
         <div className="mt-8 text-center flex items-center justify-center gap-4">
           <h3 className="text-7xl font-light tracking-tighter">
             {temp}<span className="text-4xl ml-1">°C</span>
           </h3>
           <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm p-3">
-            <img 
-              src={status.iconUrl} 
-              alt={status.title}
-              className="w-full h-full object-contain"
-            />
+            <img src={status.iconUrl} alt={status.title} className="w-full h-full object-contain" />
           </div>
         </div>
 
         <p className="mt-6 text-center text-white/90 text-sm leading-relaxed h-10">{status.desc}</p>
 
-        {/* 기상 상세 정보 그리드 */}
         <div className="grid grid-cols-2 gap-3 mt-8">
           <WeatherInfoItem label="습도" value={pty === 1 ? "90%" : "45%"} icon="💧" />
           <WeatherInfoItem label="풍속" value={pty === 2 ? "6.5m/s" : "2.1m/s"} icon="🚩" />
@@ -121,7 +110,7 @@ export default function WeatherShelterPage() {
           </button>
         </div>
 
-        {/* 일일 기온 변화 그래프 */}
+        {/* 그래프 섹션 */}
         <div className="mt-8 pt-6 border-t border-white/20">
           <p className="text-[11px] font-bold text-white/80 mb-4">일일 기온 변화</p>
           <div className="flex justify-between items-end h-16 px-1">
@@ -129,7 +118,7 @@ export default function WeatherShelterPage() {
               <div key={i} className="flex flex-col items-center gap-2">
                 <div 
                   className="w-1.5 bg-white/60 rounded-full transition-all duration-1000" 
-                  style={{ height: `${((h + 10) / 50) * 100}%` }} // 온도 범위에 맞춰 그래프 높이 조절
+                  style={{ height: `${((h + 10) / 50) * 100}%` }}
                 ></div>
                 <span className="text-[9px] text-white/60">{6 + i * 3}시</span>
               </div>
@@ -138,13 +127,24 @@ export default function WeatherShelterPage() {
         </div>
       </section>
 
-      {/* 쉼터 리스트 섹션 */}
-      <section className="px-4 mt-8">
-        <h3 className="text-sm font-bold text-gray-600 mb-3 px-1">가까운 대피 시설</h3>
-        <div className="space-y-3">
-          <ShelterItem name={temp >= 25 ? "무더위 쉼터" : "한파 쉼터"} address="테헤란로 123" distance="0.3km" />
-          <ShelterItem name="구민 체육 센터" address="대치동 234" distance="1.2km" />
-        </div>
+      {/* 📍 [수정된 메인 버튼] 큼직한 버튼 섹션 */}
+      <section className="px-4 mt-12 mb-12">
+        <button 
+          className="w-full group relative overflow-hidden bg-white rounded-3xl p-8 shadow-[0_20px_50px_rgba(16,185,129,0.15)] border-2 border-emerald-100 active:scale-[0.98] transition-all duration-300"
+        >
+          {/* 배경 꾸미기용 원형 요소 */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-500 opacity-50"></div>
+          
+          <div className="relative flex flex-col items-center gap-4">
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-4xl shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform duration-300">
+              📍
+            </div>
+            <div className="text-center">
+              <h3 className="text-2xl font-black text-gray-900 tracking-tight">가까운 쉼터 찾기</h3>
+              <p className="text-emerald-600 font-bold text-sm mt-1 uppercase tracking-widest">Find Nearest Shelter</p>
+            </div>
+          </div>
+        </button>
       </section>
 
       {/* 하단 네비게이션 */}
@@ -154,10 +154,10 @@ export default function WeatherShelterPage() {
         <NavItem label="로그인" icon="👤" active={false} />
       </nav>
 
-      {/* 내일 날씨 상세보기 모달 */}
+      {/* 내일 날씨 모달 창 */}
       {showDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl scale-in-center transition-all">
+          <div className="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl">
             <h4 className="text-lg font-bold mb-4 flex items-center gap-2">📅 내일 날씨 예보</h4>
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-2 border-b">
@@ -183,7 +183,7 @@ export default function WeatherShelterPage() {
   );
 }
 
-// --- 하위 컴포넌트들 (변경 없음) ---
+// --- 하위 컴포넌트 ---
 function WeatherInfoItem({ label, value, icon }: { label: string, value: string, icon: string }) {
   return (
     <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -191,21 +191,6 @@ function WeatherInfoItem({ label, value, icon }: { label: string, value: string,
         <span>{icon}</span> {label}
       </div>
       <div className="text-xl font-bold tracking-tight">{value}</div>
-    </div>
-  );
-}
-
-function ShelterItem({ name, address, distance }: { name: string, address: string, distance: string }) {
-  return (
-    <div className="flex justify-between items-center p-4 bg-white/80 rounded-2xl shadow-sm border border-emerald-100/50">
-      <div className="flex gap-3">
-        <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600 border border-green-100">📍</div>
-        <div>
-          <h4 className="font-bold text-[13px]">{name}</h4>
-          <p className="text-[10px] text-gray-400 mt-0.5">{address}</p>
-        </div>
-      </div>
-      <span className="text-[10px] text-green-600 font-extrabold bg-green-50 px-2 py-0.5 rounded-full">{distance}</span>
     </div>
   );
 }

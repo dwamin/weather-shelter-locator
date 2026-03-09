@@ -73,7 +73,9 @@ function ShelterItem({
   onClick: () => void;
 }): JSX.Element {
   return (
-    <div className="flex justify-between items-center p-4 bg-white/80 rounded-2xl shadow-sm border border-emerald-100/50 transition backdrop-blur-sm">
+    <div 
+    onClick={()=>alert("Hi!!!!")}
+    className="flex justify-between items-center p-4 bg-white/80 rounded-2xl shadow-sm border border-emerald-100/50 transition backdrop-blur-sm">
       <div className="flex gap-3">
         <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600 border border-green-100">
           📍
