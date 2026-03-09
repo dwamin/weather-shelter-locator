@@ -1,15 +1,18 @@
 'use client'
 import React, { useEffect, useRef, useState } from "react";
 
-export default function MapNavigation() {
-  const mapContainer = useRef(null);
-  const mapInstance = useRef(null);
-  const [subtitle, setSubtitle] = useState("주변 쉼터를 찾는 중...");
-  const [fontSize, setFontSize] = useState(20);
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [isOffline, setIsOffline] = useState(false);
+var window:any = window || {};
+const newWindow: any = window as any;
 
-  const state = useRef({
+export default function MapNavigation() {
+  const mapContainer = useRef<any>(null);
+  const mapInstance = useRef<any>(null);
+  const [subtitle, setSubtitle] = useState<any>("주변 쉼터를 찾는 중...");
+  const [fontSize, setFontSize] = useState<any>(20);
+  const [showWelcome, setShowWelcome] = useState<any>(true);
+  const [isOffline, setIsOffline] = useState<any>(false);
+
+  const state = useRef<any>({
     myMarker: null,
     polyline: null,
     routeSteps: [],
@@ -21,7 +24,7 @@ export default function MapNavigation() {
     currentEndLng: 0,
     currentShelterName: "",
     openedInfowindows: [],
-    selectedVoice: null,
+    selectedVoice: null as any,
   });
 
   const arrowImage =
@@ -30,12 +33,12 @@ export default function MapNavigation() {
   const loadVoices = () => {
     const voices = window.speechSynthesis.getVoices();
     state.current.selectedVoice =
-      voices.find((v) => v.name.includes("Google") && v.lang === "ko-KR") ||
-      voices.find((v) => v.name.includes("Yuna") && v.lang === "ko-KR") ||
-      voices.find((v) => v.lang === "ko-KR" || v.lang.includes("ko"));
+      voices.find((v: any) => v.name.includes("Google") && v.lang === "ko-KR") ||
+      voices.find((v: any) => v.name.includes("Yuna") && v.lang === "ko-KR") ||
+      voices.find((v: any) => v.lang === "ko-KR" || v.lang.includes("ko"));
   };
 
-  const speak = (text) => {
+  const speak = (text: string) => {
     const formattedText = text.replace(/\. /g, ".<br>");
     setSubtitle(formattedText);
     if (typeof SpeechSynthesisUtterance === "undefined") return;
@@ -53,7 +56,7 @@ export default function MapNavigation() {
     window.speechSynthesis.speak(msg);
   };
 
-  const getDistance = (lat1, lng1, lat2, lng2) => {
+  const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
     const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lng2 - lng1) * (Math.PI / 180);
@@ -65,12 +68,12 @@ export default function MapNavigation() {
     setShowWelcome(false);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
-        const locPos = new window.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        const locPos = newWindow.kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         mapInstance.current.setCenter(locPos);
         if (!state.current.myMarker) {
-          state.current.myMarker = new window.kakao.maps.Marker({
+          state.current.myMarker = new newWindow.kakao.maps.Marker({
             position: locPos, map: mapInstance.current,
-            image: new window.kakao.maps.MarkerImage("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png", new window.kakao.maps.Size(35, 35))
+            image: new newWindow.kakao.maps.MarkerImage("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png", new newWindow.kakao.maps.Size(35, 35))
           });
         }
         speak("내 위치를 확인했습니다. 가고 싶은 쉼터를 눌러보세요.");
@@ -82,14 +85,14 @@ export default function MapNavigation() {
     if (state.current.watchId) navigator.geolocation.clearWatch(state.current.watchId);
     state.current.watchId = navigator.geolocation.watchPosition((pos) => {
       const { latitude: curLat, longitude: curLng, heading } = pos.coords;
-      const locPos = new window.kakao.maps.LatLng(curLat, curLng);
+      const locPos = newWindow.kakao.maps.LatLng(curLat, curLng);
 
       if (state.current.myMarker) {
         state.current.myMarker.setPosition(locPos);
       } else {
-        state.current.myMarker = new window.kakao.maps.Marker({
+        state.current.myMarker = new newWindow.kakao.maps.Marker({
           position: locPos, map: mapInstance.current,
-          image: new window.kakao.maps.MarkerImage(arrowImage, new window.kakao.maps.Size(40, 40), { offset: new window.kakao.maps.Point(20, 20) }),
+          image: new newWindow.kakao.maps.MarkerImage(arrowImage, new newWindow.kakao.maps.Size(40, 40), { offset: new newWindow.kakao.maps.Point(20, 20) }),
         });
       }
 
@@ -97,7 +100,7 @@ export default function MapNavigation() {
       if (distToFinal < 20 && !state.current.isArrived) {
         state.current.isArrived = true;
         speak(`${state.current.currentShelterName}에 잘 도착하셨습니다. 안내를 종료합니다.`);
-        if (window.confetti) window.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, zIndex: 10001 });
+        if (newWindow.confetti) newWindow.confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, zIndex: 10001 });
         navigator.geolocation.clearWatch(state.current.watchId);
         return;
       }
@@ -105,7 +108,7 @@ export default function MapNavigation() {
       if (state.current.polyline && !state.current.isRerouting) {
         const path = state.current.polyline.getPath();
         let minDistance = Infinity;
-        path.forEach((p) => {
+        path.forEach((p: any) => {
           const d = getDistance(curLat, curLng, p.getLat(), p.getLng());
           if (d < minDistance) minDistance = d;
         });
@@ -130,8 +133,8 @@ export default function MapNavigation() {
     }, null, { enableHighAccuracy: true });
   };
 
-  const findRoute = (endLat, endLng, shelterName) => {
-    state.current.openedInfowindows.forEach((iw) => iw.close());
+  const findRoute = (endLat: number, endLng: number, shelterName: string) => {
+    state.current.openedInfowindows.forEach((iw: any) => iw.close());
     state.current.openedInfowindows = [];
     if (state.current.watchId !== null) {
       navigator.geolocation.clearWatch(state.current.watchId);
@@ -156,18 +159,18 @@ export default function MapNavigation() {
       fetch(url).then((res) => res.json()).then((data) => {
         if (data.code === "Ok") {
           const route = data.routes[0];
-          const linePath = route.geometry.coordinates.map((c) => new window.kakao.maps.LatLng(c[1], c[0]));
-          state.current.polyline = new window.kakao.maps.Polyline({ path: linePath, strokeWeight: 8, strokeColor: "#3301fc", strokeOpacity: 0.8 });
+          const linePath = route.geometry.coordinates.map((c: any) => new newWindow.kakao.maps.LatLng(c[1], c[0]));
+          state.current.polyline = new newWindow.kakao.maps.Polyline({ path: linePath, strokeWeight: 8, strokeColor: "#3301fc", strokeOpacity: 0.8 });
           state.current.polyline.setMap(mapInstance.current);
-          route.legs[0].steps.forEach((step) => {
+          route.legs[0].steps.forEach((step: any) => {
             const m = step.maneuver;
             if (m.modifier && (m.modifier.includes("u-turn") || m.modifier.includes("sharp"))) return;
             const dist = Math.round(step.distance);
             let stepText = m.type === "depart" ? "안내를 시작합니다. " : m.type === "arrive" ? "목적지 근처에 도착했습니다. " : `${dist > 10 ? dist + "미터 직진 후 " : ""}${m.modifier === "left" ? "왼쪽으로 꺾으세요" : m.modifier === "right" ? "오른쪽으로 꺾으세요" : "앞으로 이동하세요"}`;
             state.current.routeSteps.push({ lat: m.location[1], lng: m.location[0], instruction: stepText });
           });
-          const bounds = new window.kakao.maps.LatLngBounds();
-          linePath.forEach((p) => bounds.extend(p));
+          const bounds = new newWindow.kakao.maps.LatLngBounds();
+          linePath.forEach((p: any) => bounds.extend(p));
           mapInstance.current.setBounds(bounds);
           if (!state.current.isRerouting) {
             const duration = Math.ceil(route.distance / 50);
@@ -193,8 +196,8 @@ export default function MapNavigation() {
     script.async = true;
     document.head.appendChild(script);
     script.onload = () => {
-      window.kakao.maps.load(() => {
-        mapInstance.current = new window.kakao.maps.Map(mapContainer.current, { center: new window.kakao.maps.LatLng(37.5665, 126.978), level: 4 });
+      newWindow.kakao.maps.load(() => {
+        mapInstance.current = new newWindow.kakao.maps.Map(mapContainer.current, { center: new newWindow.kakao.maps.LatLng(37.5665, 126.978), level: 4 });
         fetch("http://localhost:8000/api/shelters").then((res) => res.json()).then((data) => initMarkers(data));
       });
     };
@@ -204,14 +207,14 @@ export default function MapNavigation() {
     };
   }, []);
 
-  const initMarkers = (data) => {
-    data.forEach((s) => {
-      const marker = new window.kakao.maps.Marker({ position: new window.kakao.maps.LatLng(s.lat, s.lng), map: mapInstance.current });
+  const initMarkers = (data: any[]) => {
+    data.forEach((s: any) => {
+      const marker = new newWindow.kakao.maps.Marker({ position: new newWindow.kakao.maps.LatLng(s.lat, s.lng), map: mapInstance.current });
       const content = document.createElement("div");
       content.style.cssText = "padding:10px; font-size:14px; color:black; min-width:150px; background:white; border-radius:8px;";
       content.innerHTML = `<strong>${s.name}</strong><br><button id="nav-btn-${s.name.replace(/\s/g, "")}" style="margin-top:10px; cursor:pointer; width:100%; height:35px; background:#4CAF50; color:white; border:none; border-radius:5px; font-weight:bold;">🚶 길안내 시작</button>`;
-      const infowindow = new window.kakao.maps.InfoWindow({ content: content, removable: true });
-      window.kakao.maps.event.addListener(marker, "click", () => {
+      const infowindow = new newWindow.kakao.maps.InfoWindow({ content: content, removable: true });
+      newWindow.kakao.maps.event.addListener(marker, "click", () => {
         if (!state.current.openedInfowindows.includes(infowindow)) {
           if (state.current.openedInfowindows.length >= 3) state.current.openedInfowindows.shift().close();
           infowindow.open(mapInstance.current, marker);
@@ -231,7 +234,7 @@ export default function MapNavigation() {
   return (
     <div style={{ width: "100%", height: "100vh", position: "relative" }}>
       {showWelcome && (
-        <div style={welcomeLayerStyle}>
+        <div style={(welcomeLayerStyle as any)}>
           <div style={{ fontSize: "80px", marginBottom: "20px" }}>🔊</div>
           <h1 style={{ fontSize: "30px" }}>반갑습니다!</h1>
           <p style={{ fontSize: "22px" }}>안내를 위해 <b>소리를 크게</b> 키워주세요.</p>
@@ -239,15 +242,16 @@ export default function MapNavigation() {
         </div>
       )}
       <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />
-      <div style={uiWrapperStyle}>
+      <div style={(uiWrapperStyle as any)}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <button onClick={() => speak(subtitle.replace(/<br>/g, ""))} style={buttonStyle}>🔄 다시듣기</button>
           <div style={{ display: "flex", gap: "5px" }}>
-            <button onClick={() => setFontSize((f) => Math.min(36, f + 4))} disabled={isPlusDisabled} style={{ ...subButtonStyle, backgroundColor: isPlusDisabled ? "#e0e0e0" : "white" }}>글자 +</button>
-            <button onClick={() => setFontSize((f) => Math.max(16, f - 4))} disabled={isMinusDisabled} style={{ ...subButtonStyle, backgroundColor: isMinusDisabled ? "#e0e0e0" : "white" }}>글자 -</button>
+            <button onClick={() => setFontSize((f: number) => Math.min(36, f + 4))} disabled={isPlusDisabled} style={{ ...subButtonStyle, backgroundColor: isPlusDisabled ? "#e0e0e0" : "white" }}>글자 +</button>
+            <button onClick={() => setFontSize((f: number) => Math.max(16, f - 4))} disabled={isMinusDisabled} style={{ ...subButtonStyle, backgroundColor: isMinusDisabled ? "#e0e0e0" : "white" }}>글자 -</button>
           </div>
         </div>
-        <div style={{ ...subtitleBoxStyle, fontSize: `${fontSize}px`, backgroundColor: isOffline ? "rgba(200, 0, 0, 0.9)" : "rgba(0, 0, 0, 0.85)" }}>
+        <div style={{ ...subtitleBoxStyle, fontSize: `${fontSize}px`, backgroundColor: isOffline ? 
+        "rgba(200, 0, 0, 0.9)" : "rgba(0, 0, 0, 0.85)" } as any}>
           <span dangerouslySetInnerHTML={{ __html: `🔊 ${subtitle}` }} />
         </div>
       </div>
