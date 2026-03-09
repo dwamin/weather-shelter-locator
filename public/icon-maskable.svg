@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Weather Shelter Locator maskable icon">
+  <rect width="512" height="512" fill="#166534" />
+  <circle cx="256" cy="256" r="170" fill="#22c55e" />
+  <path d="M256 122 136 236h40v130h63V290h34v76h63V236h40z" fill="#ecfdf5"/>
+  <circle cx="362" cy="176" r="40" fill="#fef08a"/>
+</svg>
