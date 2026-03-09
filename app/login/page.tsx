@@ -50,7 +50,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
   // ✅ /api/signup 호출 → function_app.py의 signup 함수
   const handleSignup = async () => {
     setError(''); setSuccess(''); setLoading(true);
@@ -59,8 +58,9 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
+    signupForm.password = await sha256(signupForm.password);
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('https://3dt-1st-project-4th-fx-hbdzardjfyg9cgcq.koreacentral-01.azurewebsites.net/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(signupForm),
@@ -115,7 +115,7 @@ export default function LoginPage() {
         </div>
 
         {/* 알림 메시지 */}
-        {error   && <div style={s.errorBox}>⚠️ {error}</div>}
+        {error && <div style={s.errorBox}>⚠️ {error}</div>}
         {success && <div style={s.successBox}>✅ {success}</div>}
 
         {/* 입력 폼 */}
@@ -189,6 +189,13 @@ export default function LoginPage() {
   );
 }
 
+async function sha256(str: string): Promise<string> {
+  const buffer = new TextEncoder().encode(str);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 // 입력 필드 공통 컴포넌트 (기존과 동일)
 function Field({ label, type, placeholder, value, onChange, onEnter }: {
   label: string; type: string; placeholder: string;
@@ -214,21 +221,21 @@ function Field({ label, type, placeholder, value, onChange, onEnter }: {
 
 const GREEN = '#10B981';
 const s: { [key: string]: React.CSSProperties } = {
-  wrapper:    { fontFamily: 'Pretendard, sans-serif', backgroundColor: '#F3F4F6', minHeight: '100vh', maxWidth: '480px', margin: '0 auto' },
-  header:     { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', backgroundColor: 'white', borderBottom: '1px solid #E5E7EB' },
-  backBtn:    { background: 'none', border: 'none', fontSize: '15px', color: GREEN, cursor: 'pointer', fontWeight: 'bold' },
-  headerTitle:{ fontSize: '18px', fontWeight: 'bold' },
-  content:    { padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: '20px' },
-  logoArea:   { textAlign: 'center', padding: '16px 0' },
-  logoIcon:   { fontSize: '56px', marginBottom: '8px' },
-  logoText:   { fontSize: '22px', fontWeight: 'bold', color: '#111827' },
-  logoSub:    { fontSize: '14px', color: '#6B7280', marginTop: '4px' },
-  tabs:       { display: 'flex', backgroundColor: '#E5E7EB', borderRadius: '12px', padding: '4px' },
-  tab:        { flex: 1, padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', color: '#6B7280', fontWeight: '500' },
-  tabActive:  { flex: 1, padding: '10px', border: 'none', background: 'white', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', color: GREEN, fontWeight: 'bold', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' },
-  formCard:   { backgroundColor: 'white', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
-  submitBtn:  { backgroundColor: GREEN, color: 'white', border: 'none', borderRadius: '12px', padding: '16px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '4px' },
-  errorBox:   { backgroundColor: '#FEF2F2', color: '#DC2626', borderRadius: '10px', padding: '12px', fontSize: '14px' },
+  wrapper: { fontFamily: 'Pretendard, sans-serif', backgroundColor: '#F3F4F6', minHeight: '100vh', maxWidth: '480px', margin: '0 auto' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', backgroundColor: 'white', borderBottom: '1px solid #E5E7EB' },
+  backBtn: { background: 'none', border: 'none', fontSize: '15px', color: GREEN, cursor: 'pointer', fontWeight: 'bold' },
+  headerTitle: { fontSize: '18px', fontWeight: 'bold' },
+  content: { padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: '20px' },
+  logoArea: { textAlign: 'center', padding: '16px 0' },
+  logoIcon: { fontSize: '56px', marginBottom: '8px' },
+  logoText: { fontSize: '22px', fontWeight: 'bold', color: '#111827' },
+  logoSub: { fontSize: '14px', color: '#6B7280', marginTop: '4px' },
+  tabs: { display: 'flex', backgroundColor: '#E5E7EB', borderRadius: '12px', padding: '4px' },
+  tab: { flex: 1, padding: '10px', border: 'none', background: 'transparent', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', color: '#6B7280', fontWeight: '500' },
+  tabActive: { flex: 1, padding: '10px', border: 'none', background: 'white', borderRadius: '8px', cursor: 'pointer', fontSize: '15px', color: GREEN, fontWeight: 'bold', boxShadow: '0 1px 4px rgba(0,0,0,0.1)' },
+  formCard: { backgroundColor: 'white', borderRadius: '20px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' },
+  submitBtn: { backgroundColor: GREEN, color: 'white', border: 'none', borderRadius: '12px', padding: '16px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', marginTop: '4px' },
+  errorBox: { backgroundColor: '#FEF2F2', color: '#DC2626', borderRadius: '10px', padding: '12px', fontSize: '14px' },
   successBox: { backgroundColor: '#F0FDF4', color: GREEN, borderRadius: '10px', padding: '12px', fontSize: '14px' },
-  guestBtn:   { background: 'none', border: '1.5px solid #D1D5DB', borderRadius: '12px', padding: '14px', fontSize: '15px', color: '#6B7280', cursor: 'pointer' },
+  guestBtn: { background: 'none', border: '1.5px solid #D1D5DB', borderRadius: '12px', padding: '14px', fontSize: '15px', color: '#6B7280', cursor: 'pointer' },
 };
