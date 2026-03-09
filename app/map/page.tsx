@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from "react";
 
+var window:any = window || {};
 const newWindow: any = window as any;
 
 export default function MapNavigation() {
@@ -32,9 +33,9 @@ export default function MapNavigation() {
   const loadVoices = () => {
     const voices = window.speechSynthesis.getVoices();
     state.current.selectedVoice =
-      voices.find((v) => v.name.includes("Google") && v.lang === "ko-KR") ||
-      voices.find((v) => v.name.includes("Yuna") && v.lang === "ko-KR") ||
-      voices.find((v) => v.lang === "ko-KR" || v.lang.includes("ko"));
+      voices.find((v: any) => v.name.includes("Google") && v.lang === "ko-KR") ||
+      voices.find((v: any) => v.name.includes("Yuna") && v.lang === "ko-KR") ||
+      voices.find((v: any) => v.lang === "ko-KR" || v.lang.includes("ko"));
   };
 
   const speak = (text: string) => {
