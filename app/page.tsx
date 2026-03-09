@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation";
 type PTYType = 0 | 1 | 2 | 3;
 
 export default function WeatherShelterPage() {
-<<<<<<< HEAD
-  const [temp, setTemp] = useState(9); // 현재 기온 예시
-  const [pty, setPty] = useState<PTYType>(0); // 현재 PTY 상태 관리
-=======
+//<<<<<<< HEAD
+//  const [temp, setTemp] = useState(9); // 현재 기온 예시
+//  const [pty, setPty] = useState<PTYType>(0); // 현재 PTY 상태 관리
+//=======
   const router = useRouter();
   const [temp, setTemp] = useState(9);
   const [pty, setPty] = useState<PTYType>(0);
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
+//>>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
   const [showDetail, setShowDetail] = useState(false);
 
   // ✅ 로그인 상태 (login/page.tsx에서 저장한 값 읽어옴)
