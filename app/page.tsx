@@ -6,14 +6,9 @@ import { useRouter } from "next/navigation";
 type PTYType = 0 | 1 | 2 | 3;
 
 export default function WeatherShelterPage() {
-<<<<<<< HEAD
-  const [temp, setTemp] = useState(9); // 현재 기온 예시
-  const [pty, setPty] = useState<PTYType>(0); // 현재 PTY 상태 관리
-=======
   const router = useRouter();
   const [temp, setTemp] = useState(9);
   const [pty, setPty] = useState<PTYType>(0);
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
   const [showDetail, setShowDetail] = useState(false);
 
   // ✅ 로그인 상태 (login/page.tsx에서 저장한 값 읽어옴)
@@ -36,17 +31,6 @@ export default function WeatherShelterPage() {
     return "from-blue-700 to-indigo-900";
   };
 
-<<<<<<< HEAD
-  // PTY와 온도를 조합하여 상세 데이터 반환
-  const getStatusData = (t: number, p: PTYType) => {
-    const ptyData = {
-      0: { title: "화창함", icon: "https://cdn-icons-png.flaticon.com/128/869/869869.png" },
-      1: { title: "비", icon: "https://cdn-icons-png.flaticon.com/128/3313/3313888.png" },
-      2: { title: "눈", icon: "https://cdn-icons-png.flaticon.com/128/2315/2315302.png" },
-      3: { title: "흐림", icon: "https://cdn-icons-png.flaticon.com/128/1146/1146869.png" },
-    };
-
-=======
   const getStatusData = (t: number, p: PTYType) => {
     const ptyData = {
       0: { title: "화창함", icon: "https://cdn-icons-png.flaticon.com/128/869/869869.png" },
@@ -54,7 +38,6 @@ export default function WeatherShelterPage() {
       2: { title: "눈",     icon: "https://cdn-icons-png.flaticon.com/128/2315/2315302.png" },
       3: { title: "흐림",   icon: "https://cdn-icons-png.flaticon.com/128/1146/1146869.png" },
     };
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
     let desc = "";
     if (t >= 33)      desc = "극심한 폭염입니다! 야외 활동을 중단하세요.";
     else if (t >= 25) desc = "무더운 날씨입니다. 수분을 충분히 섭취하세요.";
@@ -100,32 +83,17 @@ export default function WeatherShelterPage() {
       {/* 메인 날씨 카드 */}
       <section className={`m-4 p-6 rounded-3xl text-white shadow-lg transition-all duration-700 bg-gradient-to-br ${getBgColor(temp)}`}>
         <div className="flex justify-between items-start">
-<<<<<<< HEAD
-          <div className="flex items-center gap-2">
-            <div>
-              <h2 className="text-xl font-bold">{status.title}</h2>
-              <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Live</span>
-            </div>
-          </div>
-          
-=======
           <div>
             <h2 className="text-xl font-bold">{status.title}</h2>
             <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wider">Live</span>
           </div>
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
           <div className="flex flex-col gap-2 items-end">
             <div className="flex gap-1">
               <button onClick={() => setTemp(temp - 5)} className="bg-white/20 px-2 py-1 rounded text-xs active:scale-95 transition">-5°</button>
               <button onClick={() => setTemp(temp + 5)} className="bg-white/20 px-2 py-1 rounded text-xs active:scale-95 transition">+5°</button>
             </div>
-<<<<<<< HEAD
-            <select 
-              value={pty} 
-=======
             <select
               value={pty}
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
               onChange={(e) => setPty(Number(e.target.value) as PTYType)}
               className="bg-white/20 text-xs px-2 py-1 rounded text-white border-none outline-none appearance-none cursor-pointer"
             >
@@ -163,26 +131,15 @@ export default function WeatherShelterPage() {
           </button>
         </div>
 
-<<<<<<< HEAD
-        {/* 그래프 섹션 */}
-=======
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
         <div className="mt-8 pt-6 border-t border-white/20">
           <p className="text-[11px] font-bold text-white/80 mb-4">일일 기온 변화</p>
           <div className="flex justify-between items-end h-16 px-1">
             {[temp-2, temp, temp+4, temp+6, temp+2, temp].map((h, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
-<<<<<<< HEAD
-                <div 
-                  className="w-1.5 bg-white/60 rounded-full transition-all duration-1000" 
-                  style={{ height: `${((h + 10) / 50) * 100}%` }}
-                ></div>
-=======
                 <div
                   className="w-1.5 bg-white/60 rounded-full transition-all duration-1000"
                   style={{ height: `${((h + 10) / 50) * 100}%` }}
                 />
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
                 <span className="text-[9px] text-white/60">{6 + i * 3}시</span>
               </div>
             ))}
@@ -190,26 +147,6 @@ export default function WeatherShelterPage() {
         </div>
       </section>
 
-<<<<<<< HEAD
-      {/* 📍 [수정된 메인 버튼] 큼직한 버튼 섹션 */}
-      <section className="px-4 mt-12 mb-12">
-        <button 
-          className="w-full group relative overflow-hidden bg-white rounded-3xl p-8 shadow-[0_20px_50px_rgba(16,185,129,0.15)] border-2 border-emerald-100 active:scale-[0.98] transition-all duration-300"
-        >
-          {/* 배경 꾸미기용 원형 요소 */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-500 opacity-50"></div>
-          
-          <div className="relative flex flex-col items-center gap-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center text-4xl shadow-lg shadow-emerald-200 group-hover:rotate-12 transition-transform duration-300">
-              📍
-            </div>
-            <div className="text-center">
-              <h3 className="text-2xl font-black text-gray-900 tracking-tight">가까운 쉼터 찾기</h3>
-              <p className="text-emerald-600 font-bold text-sm mt-1 uppercase tracking-widest">Find Nearest Shelter</p>
-            </div>
-          </div>
-        </button>
-=======
       {/* 쉼터 리스트 */}
       <section className="px-4 mt-8">
         <h3 className="text-sm font-bold text-gray-600 mb-3 px-1">가까운 대피 시설</h3>
@@ -217,7 +154,6 @@ export default function WeatherShelterPage() {
           <ShelterItem name={temp >= 25 ? "무더위 쉼터" : "한파 쉼터"} address="테헤란로 123" distance="0.3km" />
           <ShelterItem name="구민 체육 센터" address="대치동 234" distance="1.2km" />
         </div>
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
       </section>
 
       {/* ✅ 하단 네비게이션 - onClick 연결 */}
@@ -233,19 +169,11 @@ export default function WeatherShelterPage() {
         />
       </nav>
 
-<<<<<<< HEAD
-      {/* 내일 날씨 모달 창 */}
-      {showDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl">
-            <h4 className="text-lg font-bold mb-4 flex items-center gap-2">📅 내일 날씨 예보</h4>
-=======
       {/* 내일 날씨 상세 모달 */}
       {showDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/50 backdrop-blur-sm">
           <div className="bg-white w-full max-w-xs rounded-3xl p-6 shadow-2xl">
             <h4 className="text-lg font-bold mb-4">📅 내일 날씨 예보</h4>
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
             <div className="space-y-4">
               <div className="flex justify-between items-center pb-2 border-b">
                 <span className="text-gray-500">오전</span>
@@ -267,10 +195,6 @@ export default function WeatherShelterPage() {
   );
 }
 
-<<<<<<< HEAD
-// --- 하위 컴포넌트 ---
-=======
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
 function WeatherInfoItem({ label, value, icon }: { label: string, value: string, icon: string }) {
   return (
     <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
@@ -282,9 +206,6 @@ function WeatherInfoItem({ label, value, icon }: { label: string, value: string,
   );
 }
 
-<<<<<<< HEAD
-function NavItem({ label, icon, active }: { label: string, icon: string, active: boolean }) {
-=======
 function ShelterItem({ name, address, distance }: { name: string, address: string, distance: string }) {
   return (
     <div className="flex justify-between items-center p-4 bg-white/80 rounded-2xl shadow-sm border border-emerald-100/50">
@@ -304,7 +225,6 @@ function ShelterItem({ name, address, distance }: { name: string, address: strin
 function NavItem({ label, icon, active, onClick }: {
   label: string; icon: string; active: boolean; onClick: () => void;
 }) {
->>>>>>> 2a15708d4461a6572e83deb8dca3dfe0a3d73b68
   return (
     <button
       onClick={onClick}
